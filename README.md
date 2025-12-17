@@ -1,14 +1,14 @@
 # Deeplearning_Project
-extract data.zip
-# Activate env
-
+Download eatch file and put it into and folder named data
 link for download dataset: 
 Validation: https://storage.googleapis.com/learning-datasets/rps-validation.zip
 Train: https://storage.googleapis.com/download.tensorflow.org/data/rps.zip
 Test: https://storage.googleapis.com/download.tensorflow.org/data/rps-test-set.zip
 
-Download eatch file and put it into and folder named data
+# Create env
+- python -m venv venv
 
+# Activate env
 Mac: 
 - source venv/bin/activate
 

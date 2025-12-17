@@ -1,3 +1,4 @@
+import time
 from matplotlib import pyplot as plt
 import torch
 import torch.nn as nn
@@ -26,23 +27,34 @@ if __name__ == "__main__":
     num_classes = 3 
 
     #Creating the models
-
+    #to freeze layers 
+    # for param in model.parameters():
+    #     param.requires_grad = False
+    
     # Resnet18
-    # model = models.resnet18(weights=models.ResNet18_Weights.IMAGENET1K_V1)
-    # model.fc = nn.Linear(model.fc.in_features, num_classes)
+    model = models.resnet18(weights=models.ResNet18_Weights.IMAGENET1K_V1)
+    # for param in model.parameters():
+    #     param.requires_grad = False
+    model.fc = nn.Linear(model.fc.in_features, num_classes)
 
     # EfficientNetV2-S 
     # model = models.efficientnet_v2_s(weights=models.EfficientNet_V2_S_Weights.IMAGENET1K_V1)
+    # for param in model.parameters():
+    #     param.requires_grad = False
     # model.classifier[1] = nn.Linear(model.classifier[1].in_features, num_classes)
 
     # ConvNeXt-Tiny 
     # model = models.convnext_tiny(weights=models.ConvNeXt_Tiny_Weights.IMAGENET1K_V1)
+    # for param in model.parameters():
+    #     param.requires_grad = False
     # model.classifier[2] = nn.Linear(model.classifier[2].in_features, num_classes)
 
     # Swin Transformer-Tiny
-    model = models.swin_t(weights=models.Swin_T_Weights.IMAGENET1K_V1)
-    model.head = nn.Linear(model.head.in_features, num_classes)
-
+    #model = models.swin_t(weights=models.Swin_T_Weights.IMAGENET1K_V1)
+    # for param in model.parameters():
+    #    param.requires_grad = False
+    #model.head = nn.Linear(model.head.in_features, num_classes)
+   
     model_name = getattr(model, 'arch', model.__class__.__name__)
 
     device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
@@ -57,6 +69,8 @@ if __name__ == "__main__":
     train_acc, valid_acc = [], []
 
     scheduler = ReduceLROnPlateau(optimizer, mode='min', patience=3, factor=0.5)
+    start_time = time.perf_counter()
+
 
     for epoch in range(epochs):
         print(f"[INFO]: Epoch {epoch+1} of {epochs}")
@@ -84,7 +98,11 @@ if __name__ == "__main__":
     # Save the loss and accuracy plots.
     save_plots(train_acc, valid_acc, train_loss, valid_loss, name=model_name)
     print("TRAINING COMPLETE")
-
+    
+    end_time = time.perf_counter()
+    total_time = end_time - start_time
+    print(f"Total training time: {total_time:.2f} seconds")
+    
     test_loss, test_acc = validate(model, test_loader, criterion, device)
     print(f"Final Test Loss: {test_loss:.3f}")
     print(f"Final Test Accuracy: {test_acc:.3f}%")

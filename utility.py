@@ -3,7 +3,7 @@ import os
 import matplotlib.pyplot as plt
 
 def save_plots(train_acc, valid_acc, train_loss, valid_loss, name=None):
-    checkdir = "outputs"
+    checkdir = "outputs_freezed"
     if not os.path.exists(checkdir):
         os.makedirs(checkdir)
     """
@@ -16,7 +16,7 @@ def save_plots(train_acc, valid_acc, train_loss, valid_loss, name=None):
     plt.xlabel("Epochs")
     plt.ylabel("Accuracy")
     plt.legend()
-    plt.savefig(os.path.join("outputs", name + "_accuracy.png"))
+    plt.savefig(os.path.join(checkdir, name + "_accuracy.png"))
 
     # Loss plots.
     plt.figure(figsize=(10, 7))
@@ -25,4 +25,4 @@ def save_plots(train_acc, valid_acc, train_loss, valid_loss, name=None):
     plt.xlabel("Epochs")
     plt.ylabel("Loss")
     plt.legend()
-    plt.savefig(os.path.join("outputs", name + "_loss.png"))
+    plt.savefig(os.path.join(checkdir, name + "_loss.png"))
